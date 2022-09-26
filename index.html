@@ -91,5 +91,267 @@
             <p class="footer-spece">　</p>
             <p class="Copyright">© 2022 KOUBAIN</p>
         </footer>
+        <style>
+    select {
+    font-size: 1.1em;
+    padding: 10px;
+    margin-left: 20px;
+}
+
+button {
+    font-size: 1.2em;
+    display: block;
+    width: 50%;
+    margin: 30px auto;
+    padding: 10px 0;
+}
+
+.result_container {
+    display: flex;
+
+}
+
+.result_container1 {
+    display: flex;
+
+}
+
+.hyouka {
+    text-align: center;
+    display: flex;
+}
+
+.pin1 {
+    height: 39px;
+    width: 200px;
+    font-size: 17.6px;
+}
+
+.sel1 {
+    display: flex;
+    margin-left: 9%;
+}
+
+.sel2 {
+    display: flex;
+}
+
+.sel-t {
+    text-align: center;
+}
+
+.sen {
+    margin-left: 7%;
+    width: 85%;
+    
+}
+
+#result {
+    border: 1px solid #ddd;
+    padding: 10px;
+    line-height: 3em;
+    text-align: center;
+    font-weight: bold;
+
+}
+#resultsec {
+    border: 1px solid #ddd;
+    padding: 10px;
+    line-height: 3em;
+    text-align: center;
+    font-weight: bold;
+
+}
+#resultth {
+    border: 1px solid #ddd;
+    padding: 10px;
+    line-height: 3em;
+    text-align: center;
+    font-weight: bold;
+
+}
+
+.goodbad {
+    height: 49px;
+    font-size: 29.2px;
+    text-align: center;
+}
+
+#result.high {
+    color: red;
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+#result.middle {
+    color: sienna;
+    background-color: rgba(255, 255, 0, 0.2);
+}
+
+
+
+/*上の隙間をなくしてる*/
+*{
+    margin: 0;
+    padding: 0;}
+
+/*ページ左上のメインボタン*/
+.top-top{
+    height: 90px;
+    margin-left: 35px;
+    float: left;}
+
+/*ヘッダー全体*/
+header{
+    width: 100%;
+    height: 90px;
+    text-align: center;
+    background-color: #f5cf89;}  
+
+/*ヘッダーの鈴-->*/    
+header .suzu{
+    height: 60px;
+    text-align: center;
+    margin-left: 7%;
+    margin-top: 75px;}
+
+/*ヘッダーのメニュー*/
+header .top-list{
+    line-height: 40px;
+    margin-top: 20px;
+    float: right;
+    margin-right: 70px;
+    list-style: none;
+    color: #ffffff;}
+
+/*ヘッダーのメニューの色変え*/
+.t-m{
+    color: inherit;
+    text-decoration: none;}
+
+/*ヘッダーの開いてるページのメニュー*/
+header .top-list-item-1{
+    list-style: none;
+    display: inline-block;
+    margin: 0 3px;
+    border-bottom: 3px solid #ffffff;
+    position: relative;}
+
+/*ヘッダーの開いてるページ以外のメニュー①*/
+header .top-list-item{
+    list-style: none;
+    display: inline-block;
+    margin: 0 3px;
+    position: relative;}
+
+/*ヘッダーの開いてるページ以外のメニュー②*/
+header .top-list-item::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0px;
+    width: 100%;
+    height: 3px;
+    background: #ffffff;
+    display: block;
+    -webkit-transform-origin: right top;
+    -ms-transform-origin: right top;
+    transform-origin: right top;
+    -webkit-transform: scale(0, 1);
+    -ms-transform: scale(0, 1);
+    transform: scale(0, 1);
+    -webkit-transition: transform 0.4s cubic-bezier(1, 0, 0, 1);
+    transition: transform 0.4s cubic-bezier(1, 0, 0, 1)}
+
+/*ヘッダーの開いてるページ以外のメニュー③*/    
+header .top-list-item:hover::before {
+    -webkit-transform-origin: left top;
+    -ms-transform-origin: left top;
+    transform-origin: left top;
+    -webkit-transform: scale(1, 1);
+    -ms-transform: scale(1, 1);
+    transform: scale(1, 1)}
+
+/*フッター全体*/
+footer{
+    width: 100%;
+    height: 100px;
+    background-color: #f5cf89;
+    color: white;
+    text-align: center;}
+
+/*フッターのメニューを並べてる*/
+    ul.footer-menu li {
+    display: inline;
+    }
+
+/*フッターのメニューの色変え*/
+.f-m{
+    color: inherit;
+    text-decoration: none;}
+
+/*フッターのメニューと©の隙間*/
+footer .footer-spece{
+    font-size: 1px;}
+
+/*メイン背景*/
+main{
+    background-image: url(https://drive.google.com/uc?id=1Sbp0BmmlCHDDNyHWXjH5nOlU1GAESxUD);
+    background-size: 100% 10000px;
+    background-repeat: no-repeat;}
+
+/*メインタイトル*/
+main .title{
+    font-size: 70px;
+    color: #926400;
+    text-align: center;}
+
+.loop_wrap {
+    display: flex;
+    height: 60px;
+    overflow: hidden;
+  }
+  
+.loop_wrap img {
+    width: auto;
+    height: 100%;
+  }
+
+  @keyframes loop {
+    0% {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  
+  @keyframes loop2 {
+    0% {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-200%);
+    }
+  }
+
+  .loop_wrap img:first-child {
+    animation: loop 50s -25s linear infinite;
+  }
+  
+  .loop_wrap img:last-child {
+    animation: loop2 50s linear infinite;
+  }
+
+.news {
+    border: 2px solid #ddd;
+    padding: 10px;
+    width: 70%;
+    margin: 0 auto;
+    line-height: 2.1em;
+    text-align: center;
+    font-weight: bold;
+
+}
+</style>
     </body>
 </html>
