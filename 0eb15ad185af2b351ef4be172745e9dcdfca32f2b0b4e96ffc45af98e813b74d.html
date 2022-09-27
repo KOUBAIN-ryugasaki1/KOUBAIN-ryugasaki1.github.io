@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>こうバイん-AIおすすめ診断</title>
+        <link rel="icon" href="https://drive.google.com/uc?id=1lzQEwSwboyTzgRMtd59LI8Ksad71wzKu">
+        <link rel="apple-touch-icon" href="https://drive.google.com/uc?id=167a17E-XTmhatZxz1s9Rd-KYmnla5mEd">    
+    </head>
+    <body>
+        <div class="loop_wrap">
+            <img src="https://drive.google.com/uc?id=1Qgt54h9ZT-qc1WdwK9KeKGChcrSAtWmM"><img src="https://drive.google.com/uc?id=1Qgt54h9ZT-qc1WdwK9KeKGChcrSAtWmM">
+        </div> 
+        <header>
+            <a href="edd725c046484394a2bc7550c2cf0c1f70aacf2160e36b7722c1372fbf14c8a4.html"><img src="https://drive.google.com/uc?id=13ALCeiYNFyHaZQcFPaG1OZ4ezXfOg8jz" class="top-top"></a>
+            <ul class="top-list">
+                <li class="top-list-item"><a href="edd725c046484394a2bc7550c2cf0c1f70aacf2160e36b7722c1372fbf14c8a4.html" class="t-m">　Home　</a></li>
+                <li class="top-list-item"><a href="0eb15ad185af2b351ef4be172745e9dcdfca32f2b0b4e96ffc45af98e813b74d.html" class="t-m">　AIおすすめ診断　</a></li>
+                <li class="top-list-item-1"><a href="b81d9593a3f6c4f7d125fd1da37c9b1fb180574cfb728f3db3c70eda3053e079.html" class="t-m">　Oder　</a></li>
+                <li class="top-list-item"><a href="398991009da1d251792eb353a0b7b185bc83e71e12e489e73228b554fc6cebc5.html" class="t-m">　Menu　</a></li>
+                <li class="top-list-item"><a href="a4262e1c9bcbc1721eb3fe13558154460a2b2a2d307daa32532478526ce6ccb1.html" class="t-m">　About　</a></li>
+            </ul>
+        </header>
+        <main>
+            <div class="loop_wrap">
+                <img src="https://drive.google.com/uc?id=1QBK_cntjAYUTV9dm4xgnOWvck6cdlQKe"><img src="https://drive.google.com/uc?id=1QBK_cntjAYUTV9dm4xgnOWvck6cdlQKe">
+            </div>
+            <br>
+            <h1 class="title">AI おすすめ診断</h1>
+            <br>
+            <hr class="sen">
+            <br>
+            <script>
+                // Prediction OneのAPI作成画面で表示されるAPI URLとAPI Keyを設定する
+const PREDICTION_ONE_KEY = "09f2987e-2a22-4fd9-8cb0-aff042f5cc17";
+const PREDICTION_ONE_URL = "https://user-api.predictionone.sony.biz/v1/groups/pdm9airlpozx6k24/classifiers/qgj3hwgalm9d0wz7/inference";
+
+// APIが受け付けているデータ形式に変換する
+function b64Decode(str) {
+    const encodedURI = atob(str).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join('')
+    const result = decodeURIComponent(encodedURI);
+    return result;
+}
+function b64Encode(str) {
+    const stringToEncode = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+        function toSolidBytes(match, p1) {
+            return String.fromCharCode('0x' + p1);
+    })
+    const result = btoa(stringToEncode);
+    return result;
+}
+// APIにデータを送信する
+async function postData(url = '', data = {}, key ) {
+    
+    hoge = await fetch(url, {
+        method: 'POST',
+        mode: 'cors', 
+        headers: {
+            'Content-Type': 'application/json',
+            "x-api-key": key,
+        },
+        body: JSON.stringify(data)
+    }).then(response => response.json())
+    .then(data => {
+        return  b64Decode( data.outputs[0].data) 
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+    return hoge;
+}
+
+async function predict(pred_data, preidcion_one_url, key  ){
+
+    const url = preidcion_one_url;
+    // APIへの送信内容を整える
+    const data = 
+            {"inputs":
+                [
+                    {"name":"pr","type":"csv","data": b64Encode(pred_data)},
+                    {"name":"ar","type":"boolean","data":true},
+                    {"name":"ad","type":"boolean","data":false},
+                    {"name":"nc","type":"boolean","data":true}]
+                }
+        return await postData(url,data,key);
+}
+
+// 送信ボタンが押された時の処理
+submit = async function(){
+    document.querySelector("#result").innerText = "予測中";
+    document.querySelector( "#submit" ).disabled = true;
+    document.querySelector("#result").className ="";
+    document.querySelector("#resultsec").innerText = "予測中";
+    document.querySelector( "#submit" ).disabled = true;
+    document.querySelector("#resultsec").className ="";
+    document.querySelector("#resultth").innerText = "予測中";
+    document.querySelector( "#submit" ).disabled = true;
+    document.querySelector("#resultth").className ="";
+    
+    const selects = document.querySelectorAll("select");
+    const data = [ [],[] ];
+    selects.forEach( elm =>{
+        data[ 0 ].push( elm.name );
+        data[ 1 ].push(elm.value);
+    } );
+    const data_str = data[0].join(",") + "\n" + data[1].join(",");
+    const result = await predict( data_str, PREDICTION_ONE_URL, PREDICTION_ONE_KEY ) ;
+
+    const names =  result.split("\n")[0].split(",");
+    names.shift()
+    const scores = result.split("\n")[1].split(",");
+    scores.shift()
+
+    for (let i=0; i<scores.length-1; i++){
+        for(let j=0; j<scores.length-i; j++){
+            if(scores[j]<scores[j+1]){
+                var ntmp=scores[j];
+                scores[j]=scores[j+1];
+                scores[j+1]=ntmp;
+
+                var mtmp=names[j];
+                names[j]=names[j+1];
+                names[j+1]=mtmp;
+            }
+        }
+    }
+   
+    console.log(names)
+    console.log(scores)
+    console.log(names[0])
+    document.querySelector("#result").innerText = names[0]+"\nおすすめ度 " + Math.round(scores[0]*100) + "%";
+    document.querySelector("#resultsec").innerText = names[1]+"\nおすすめ度 " + Math.round(scores[1]*100) + "%";
+    document.querySelector("#resultth").innerText = names[2]+"\nおすすめ度 " + Math.round(scores[2]*100) + "%";
+    document.querySelector( "#submit" ).disabled = false;
+}
+            </script>
+                <h1 style="text-align: center;">あなたへのおすすめのメニューを教えます！</h1>
+                <h2 style="text-align: center;">情報を入力してください！</h2>
+                <br>
+                <hr class="sen">
+                <br>
+                    <h3 style="text-align: center;">学年・クラス</h3>
+                        <select name="grade" style="margin-left: 41%;width: 18%;" id="grade">
+                            <option value="-">-　　　　</option>
+                            <option value="高校１年Ａ組">１年Ａ組　　　　</option>
+                            <option value="高校１年Ｂ組">１年Ｂ組　　　　</option>
+                            <option value="高校１年Ｃ組">１年Ｃ組　　　　</option>
+                            <option value="高校１年Ｄ組">１年Ｄ組　　　　</option>
+                            <option value="高校１年Ｅ組">１年Ｅ組　　　　</option>
+                            <option value="高校１年Ｆ組">１年Ｆ組　　　　</option>
+                            <option value="高校１年Ｇ組">１年Ｇ組　　　　</option>
+                            <option value="高校２年Ａ組">２年Ａ組　　　　</option>
+                            <option value="高校２年Ｂ組">２年Ｂ組　　　　</option>
+                            <option value="高校２年Ｃ組">２年Ｃ組　　　　</option>
+                            <option value="高校２年Ｄ組">２年Ｄ組　　　　</option>
+                            <option value="高校２年Ｅ組">２年Ｅ組　　　　</option>
+                            <option value="高校２年Ｆ組">２年Ｆ組　　　　</option>
+                            <option value="高校２年Ｇ組">２年Ｇ組　　　　</option>
+                            <option value="高校３年Ａ組">３年Ａ組　　　　</option>
+                            <option value="高校３年Ｂ組">３年Ｂ組　　　　</option>
+                            <option value="高校３年Ｃ組">３年Ｃ組　　　　</option>
+                            <option value="高校３年Ｄ組">３年Ｄ組　　　　</option>
+                            <option value="高校３年Ｅ組">３年Ｅ組　　　　</option>
+                            <option value="高校３年Ｆ組">３年Ｆ組　　　　</option>
+                            <option value="高校３年Ｇ組">３年Ｇ組　　　　</option>
+                        </select>
+                <br>
+                <br>
+                    <h3 style="text-align: center;">性別</h3>
+                        <select name="gender" style="margin-left: 41%;width: 18%;" id="gender">
+                            <option value="-">-</option>
+                            <option value="男性">男性　　　　　　</option>
+                            <option value="女性">女性　　　　　　</option>
+                            <option value="その他">その他　　　　　</option>
+                        </select>
+                <br>
+                <br>
+                    <h3 style="text-align: center;">購買部を利用したことがありますか？</h3>
+                        <select name="use" style="margin-left: 41%;width: 18%;" id="use">
+                            <option value="-">-</option>
+                            <option value="利用したことがある。">ある　　　　　　</option>
+                            <option value="利用したことがない。">ない　　　　　　</option>
+                        </select>
+                <br>
+                <br>
+                    <h3 style="text-align: center;">どのくらいの価格帯で購入したいですか？</h3> 
+                    <select name="price" style="margin-left: 41%;width: 18%;" id="price">
+                            <option value="-">-</option>
+                            <option value="　５０～１００円">　５０～１００円</option>
+                            <option value="１００～２００円">１００～２００円</option>
+                            <option value="２００～３００円">２００～３００円</option>
+                            <option value="３００～４００円">３００～４００円</option>
+                            <option value="４００～５００円">４００～５００円</option>
+                            <option value="５００～６００円">５００～６００円</option>
+                            <option value="６００円～">６００円～　　　</option>
+                    </select>
+                <br>
+            <button onclick="submit()" id="submit" class="soushin" style="background-color: #ffe4aa; border-radius: 9px; border-width: 1.5px; outline-width: 1.5px;border-color: #ffc13a; outline-color: #ffc13a;width: 40%;">おすすめ診断開始！</button>
+            </div>
+            <hr class="sen">
+            <br>
+            <div class="result_container1">
+                <h2 style="width: 19%;margin-left: 19.5%;text-align: center;">おすすめ No.1</h2>
+                <h2 style="width: 19%;margin-left: 2%;margin-right: 2%;text-align: center;">おすすめ No.2</h2>
+                <h2 style="width: 19%;text-align: center;">おすすめ No.3</h2>
+            </div>
+            <br>
+            <div class="result_container">
+                <p id="result" style="width: 19%;margin-left: 19.5%;font-size: 20px;">-----</p>
+                <p id="resultsec" style="width: 19%;margin-left: 2%;margin-right: 2%;font-size: 20px;">-----</p>
+                <p id="resultth" style="width: 19%;font-size: 20px;">-----</p>
+            </div>
+            <br>
+            <hr class="sen">
+            <br>
+            <form>
+            <p><span id="span3"></span></p>
+            <h2 style="text-align: center;">AIおすすめ診断は役に立ちましたか？</h2>
+            <br>
+            <div class="hyouka">
+            <input type="submit" value="👍" formaction="https://script.google.com/macros/s/AKfycbyk81AYKLt02IUKc5n0VUjYIEV66woQNznLKV0l4wgDNX5VQ0nlF5QkNDvnrLCXrTc3DA/exec" formmethod="post" class="goodbad" style="background-color: #ffe4aa; border-radius: 9px; border-width: 1.5px; outline-width: 1.5px;border-color: #ffc13a; outline-color: #ffc13a; width: 18%;margin-left: 31.25%;">
+            <input type="submit" value="👎" formaction="https://script.google.com/macros/s/AKfycbyk81AYKLt02IUKc5n0VUjYIEV66woQNznLKV0l4wgDNX5VQ0nlF5QkNDvnrLCXrTc3DA/exec" formmethod="post" class="goodbad" style="background-color: #ffe4aa; border-radius: 9px; border-width: 1.5px; outline-width: 1.5px;border-color: #ffc13a; outline-color: #ffc13a; width: 18%;margin-left: 1.5%;">
+            </div>
+            </form>
+            <br>
+            <br>
+            <div class="loop_wrap">
+                <img src="https://drive.google.com/uc?id=1QBK_cntjAYUTV9dm4xgnOWvck6cdlQKe"><img src="https://drive.google.com/uc?id=1QBK_cntjAYUTV9dm4xgnOWvck6cdlQKe">
+            </div>
+        </main>
+        <footer>
+            <br>
+            <ul class="footer-menu">
+                <li><a href="edd725c046484394a2bc7550c2cf0c1f70aacf2160e36b7722c1372fbf14c8a4.html" class="f-m">Home ｜</a></li>
+                <li><a href="0eb15ad185af2b351ef4be172745e9dcdfca32f2b0b4e96ffc45af98e813b74d.html" class="f-m">AIおすすめ診断 ｜</a></li>
+                <li><a href="b81d9593a3f6c4f7d125fd1da37c9b1fb180574cfb728f3db3c70eda3053e079.html" class="f-m">Oder ｜</a></li>
+                <li><a href="398991009da1d251792eb353a0b7b185bc83e71e12e489e73228b554fc6cebc5.html" class="f-m">Menu ｜</a></li>
+                <li><a href="a4262e1c9bcbc1721eb3fe13558154460a2b2a2d307daa32532478526ce6ccb1.html" class="f-m">About</a></li>
+            </ul>
+            <p class="footer-spece">　</p>
+            <p class="Copyright">© 2022 KOUBAIN</p>
+        </footer>
+    <style>
+    select {
+    font-size: 1.1em;
+    padding: 10px;
+    margin-left: 20px;
+}
+
+button {
+    font-size: 1.2em;
+    display: block;
+    width: 50%;
+    margin: 30px auto;
+    padding: 10px 0;
+}
+
+.result_container {
+    display: flex;
+
+}
+
+.result_container1 {
+    display: flex;
+
+}
+
+.hyouka {
+    text-align: center;
+    display: flex;
+}
+
+.pin1 {
+    height: 39px;
+    width: 200px;
+    font-size: 17.6px;
+}
+
+.sel1 {
+    display: flex;
+    margin-left: 9%;
+}
+
+.sel2 {
+    display: flex;
+}
+
+.sel-t {
+    text-align: center;
+}
+
+.sen {
+    margin-left: 7%;
+    width: 85%;
+    
+}
+
+#result {
+    border: 1px solid #ddd;
+    padding: 10px;
+    line-height: 3em;
+    text-align: center;
+    font-weight: bold;
+
+}
+#resultsec {
+    border: 1px solid #ddd;
+    padding: 10px;
+    line-height: 3em;
+    text-align: center;
+    font-weight: bold;
+
+}
+#resultth {
+    border: 1px solid #ddd;
+    padding: 10px;
+    line-height: 3em;
+    text-align: center;
+    font-weight: bold;
+
+}
+
+.goodbad {
+    height: 49px;
+    font-size: 29.2px;
+    text-align: center;
+}
+
+#result.high {
+    color: red;
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+#result.middle {
+    color: sienna;
+    background-color: rgba(255, 255, 0, 0.2);
+}
+
+
+
+/*上の隙間をなくしてる*/
+*{
+    margin: 0;
+    padding: 0;}
+
+/*ページ左上のメインボタン*/
+.top-top{
+    height: 90px;
+    margin-left: 35px;
+    float: left;}
+
+/*ヘッダー全体*/
+header{
+    width: 100%;
+    height: 90px;
+    text-align: center;
+    background-color: #f5cf89;}  
+
+/*ヘッダーの鈴-->*/    
+header .suzu{
+    height: 60px;
+    text-align: center;
+    margin-left: 7%;
+    margin-top: 75px;}
+
+/*ヘッダーのメニュー*/
+header .top-list{
+    line-height: 40px;
+    margin-top: 20px;
+    float: right;
+    margin-right: 70px;
+    list-style: none;
+    color: #ffffff;}
+
+/*ヘッダーのメニューの色変え*/
+.t-m{
+    color: inherit;
+    text-decoration: none;}
+
+/*ヘッダーの開いてるページのメニュー*/
+header .top-list-item-1{
+    list-style: none;
+    display: inline-block;
+    margin: 0 3px;
+    border-bottom: 3px solid #ffffff;
+    position: relative;}
+
+/*ヘッダーの開いてるページ以外のメニュー①*/
+header .top-list-item{
+    list-style: none;
+    display: inline-block;
+    margin: 0 3px;
+    position: relative;}
+
+/*ヘッダーの開いてるページ以外のメニュー②*/
+header .top-list-item::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0px;
+    width: 100%;
+    height: 3px;
+    background: #ffffff;
+    display: block;
+    -webkit-transform-origin: right top;
+    -ms-transform-origin: right top;
+    transform-origin: right top;
+    -webkit-transform: scale(0, 1);
+    -ms-transform: scale(0, 1);
+    transform: scale(0, 1);
+    -webkit-transition: transform 0.4s cubic-bezier(1, 0, 0, 1);
+    transition: transform 0.4s cubic-bezier(1, 0, 0, 1)}
+
+/*ヘッダーの開いてるページ以外のメニュー③*/    
+header .top-list-item:hover::before {
+    -webkit-transform-origin: left top;
+    -ms-transform-origin: left top;
+    transform-origin: left top;
+    -webkit-transform: scale(1, 1);
+    -ms-transform: scale(1, 1);
+    transform: scale(1, 1)}
+
+/*フッター全体*/
+footer{
+    width: 100%;
+    height: 100px;
+    background-color: #f5cf89;
+    color: white;
+    text-align: center;}
+
+/*フッターのメニューを並べてる*/
+    ul.footer-menu li {
+    display: inline;
+    }
+
+/*フッターのメニューの色変え*/
+.f-m{
+    color: inherit;
+    text-decoration: none;}
+
+/*フッターのメニューと©の隙間*/
+footer .footer-spece{
+    font-size: 1px;}
+
+/*メイン背景*/
+main{
+    background-image: url(https://drive.google.com/uc?id=1Sbp0BmmlCHDDNyHWXjH5nOlU1GAESxUD);
+    background-size: 100% 10000px;
+    background-repeat: no-repeat;}
+
+/*メインタイトル*/
+main .title{
+    font-size: 70px;
+    color: #926400;
+    text-align: center;}
+
+.loop_wrap {
+    display: flex;
+    height: 60px;
+    overflow: hidden;
+  }
+  
+.loop_wrap img {
+    width: auto;
+    height: 100%;
+  }
+
+  @keyframes loop {
+    0% {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  
+  @keyframes loop2 {
+    0% {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-200%);
+    }
+  }
+
+  .loop_wrap img:first-child {
+    animation: loop 50s -25s linear infinite;
+  }
+  
+  .loop_wrap img:last-child {
+    animation: loop2 50s linear infinite;
+  }
+
+.news {
+    border: 2px solid #ddd;
+    padding: 10px;
+    width: 70%;
+    margin: 0 auto;
+    line-height: 2.1em;
+    text-align: center;
+    font-weight: bold;
+
+}
+</style>
+    </body>
+        <div class="loop_wrap">
+            <img src="https://drive.google.com/uc?id=1Qgt54h9ZT-qc1WdwK9KeKGChcrSAtWmM"><img src="https://drive.google.com/uc?id=1Qgt54h9ZT-qc1WdwK9KeKGChcrSAtWmM">
+        </div> 
+</html>
