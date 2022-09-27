@@ -39,7 +39,7 @@ input {
   color: rgb(200, 210, 240);
   -webkit-text-fill-color: rgb(200, 210, 240);
   background-color: rgb(10, 20, 40);
-  font-size: 40px;
+  font-size: 32px;
 }
 input::placeholder {
   font-family: "Orbitron", sans-serif;
